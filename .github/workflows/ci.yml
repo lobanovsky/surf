@@ -1,0 +1,74 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Common Env
+        run: |
+          echo "CONTAINER_REGISTRY=cr.yandex/${{ vars.YC_CR_REGISTRY_ID }}" > .env
+          echo "TAG=${{ github.sha }}" >> .env
+          echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
+          echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
+          echo "MAIL_USER=${{ secrets.MAIL_USER }}" >> .env
+
+      - name: Gradle build
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: bootJar
+
+      - name: YC-CR Login
+        uses: yc-actions/yc-cr-login@v1.2.0
+        with:
+          yc-sa-json-credentials: ${{ secrets.YC_CR_SA_JSON_CREDENTIALS }}
+
+      - name: Docker Build and Push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          cache-from: type=registry,ref=cr.yandex/${{ vars.YC_CR_REGISTRY_ID }}/tickets
+          tags: |
+            cr.yandex/${{ vars.YC_CR_REGISTRY_ID }}/tickets:${{ github.sha }}
+
+      - name: Copy files to the host
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ env.HOST_IP }}
+          username: ${{ env.HOST_USERNAME }}
+          key: ${{ secrets.HOST_KEY }}
+          source: ".env, docker-compose.yaml"
+          target: ${{ secrets.HOST_PROJECT_PATH }}-${{ github.sha }}
+
+      - name: Docker pull && up
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ env.HOST_IP }}
+          username: ${{ env.HOST_USERNAME }}
+          key: ${{ secrets.HOST_KEY }}
+          script: |
+            docker login --username json_key --password-stdin cr.yandex <<< '${{ secrets.YC_ADMIN_SA_JSON_CREDENTIALS }}'
+            cd ${{ secrets.HOST_PROJECT_PATH }}-${{ github.sha }}          
+            docker compose pull
+            docker compose up -d
+            docker logout cr.yandex
