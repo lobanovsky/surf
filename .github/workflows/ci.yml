@@ -31,6 +31,8 @@ jobs:
           echo "MAIL_HOST=${{ secrets.MAIL_HOST }}" >> .env
           echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> .env
           echo "MAIL_USER=${{ secrets.MAIL_USER }}" >> .env
+          echo "HOST_IP=${{ secrets.HOST_IP }}" >> $GITHUB_ENV
+          echo "HOST_USERNAME=${{ secrets.HOST_USERNAME }}" >> $GITHUB_ENV
 
       - name: Gradle build
         uses: gradle/gradle-build-action@v2
