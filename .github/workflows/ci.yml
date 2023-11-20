@@ -60,7 +60,7 @@ jobs:
           username: ${{ env.HOST_USERNAME }}
           key: ${{ secrets.HOST_KEY }}
           source: ".env, docker-compose.yaml"
-          target: ${{ secrets.HOST_PROJECT_PATH }}-${{ github.sha }}
+          target: ${{ secrets.HOST_PROJECT_PATH }}
 
       - name: Docker pull && up
         uses: appleboy/ssh-action@master
