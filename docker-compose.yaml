@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: ${DOCKERFILE:-Dockerfile}
     image: ${CONTAINER_REGISTRY}/tickets:${TAG}
-    container_name: tickets-${TAG}
+    container_name: tickets
     restart: always
     environment:
       MAIL_HOST: ${MAIL_HOST}
