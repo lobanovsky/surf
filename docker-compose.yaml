@@ -12,6 +12,10 @@ services:
       MAIL_HOST: ${MAIL_HOST}
       MAIL_USER: ${MAIL_USER}
       MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL_FROM: ${MAIL_FROM}
+      MAIL_TO: ${MAIL_TO}
+      MAIL_BCC: ${MAIL_BCC}
+
     ports:
       - "8085:8080"
     volumes:
