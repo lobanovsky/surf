@@ -11,24 +11,23 @@ class ScrapService(
 ) {
 
     @Async
-    fun go(email: String) {
+    fun go() {
         //6-9
         val url = "https://gid-kid.timepad.ru/event/2536799/"
         //8-13
 //        val url = "https://gid-kid.timepad.ru/event/2536849/"
+
         while (true) {
             logger().info("Пробуем найти кнопку \"Купить билеты\"")
-            val doc = Jsoup.connect(url).get()
+            val document = Jsoup.connect(url).get()
 
-            val buyButtons =
-                doc.select("a.abtn.abtn--purple.abtn--block.abtn--king.abtn--center:containsOwn(Купить билеты)")
+            val buyTicketsLink = document.select("a:contains(Купить билеты)")
 
-            for (buyButton in buyButtons) {
+            if (buyTicketsLink.isNotEmpty()) {
                 logger().info("Кнопка найдена!")
                 emailService.send(
-                    email,
-                    "Билеты доступны на 6-9 лет",
-                    "Купить билет по ссылке! https://gid-kid.timepad.ru/event/2536849/"
+                    subject = "Билеты доступны на 6-9 лет",
+                    body = "Купить билет по ссылке! $url"
                 )
                 return
             }
@@ -41,6 +40,6 @@ class ScrapService(
         }
     }
 
-    //generator mills from 60_000 to 350_000
+    //generator mills from 1 to 5 mins
     fun minGenerator() = (1..5).random().toLong()
 }

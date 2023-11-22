@@ -12,10 +12,8 @@ class TicketController(
 ) {
 
     @GetMapping()
-    fun getUser(
-        @RequestParam(value = "email", required = true, defaultValue = "valeryfomina@gmail.com") email: String,
-    ) {
-        scrapService.go(email)
+    fun getUser() {
+        scrapService.go()
     }
 
 }
