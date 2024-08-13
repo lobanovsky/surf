@@ -1,5 +1,14 @@
 FROM eclipse-temurin:17-alpine
 
+RUN apk add --no-cache \
+    chromium \
+    chromium-chromedriver \
+    curl \
+    bash
+
+ENV CHROME_BIN=/usr/bin/chromium-browser \
+    CHROME_DRIVER=/usr/bin/chromedriver
+
 WORKDIR /opt/app
 
 COPY /build/libs/*.jar app.jar
