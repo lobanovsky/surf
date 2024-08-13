@@ -1,12 +1,12 @@
 version: '3.9'
 
 services:
-  tickets:
+  surf:
     build:
       context: .
       dockerfile: ${DOCKERFILE:-Dockerfile}
-    image: ${CONTAINER_REGISTRY}/tickets:${TAG}
-    container_name: tickets
+    image: ${CONTAINER_REGISTRY}/surf:${TAG}
+    container_name: surf
     restart: always
     environment:
       MAIL_HOST: ${MAIL_HOST}

@@ -1,4 +1,4 @@
-package ru.tickets
+package ru.surf
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

@@ -2,14 +2,14 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     val springBootVersion = "3.1.5"
-    val kotlinVersion = "1.9.20"
+    val kotlinVersion = "2.0.10"
     id("org.springframework.boot") version springBootVersion
     id("io.spring.dependency-management") version "1.1.3"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
 }
 
-group = "ru.tickets"
+group = "ru.surf"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -32,7 +32,10 @@ dependencies {
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
+    implementation("org.seleniumhq.selenium:selenium-java:4.23.1")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
 }
 
 dependencyManagement {

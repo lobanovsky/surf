@@ -1,1 +1,1 @@
-rootProject.name = "tickets"
+rootProject.name = "surf"

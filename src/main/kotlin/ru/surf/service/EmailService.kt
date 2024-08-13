@@ -1,10 +1,10 @@
-package ru.tickets.service
+package ru.surf.service
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
-import ru.tickets.utils.logger
+import ru.surf.utils.logger
 
 @Service
 class EmailService(
