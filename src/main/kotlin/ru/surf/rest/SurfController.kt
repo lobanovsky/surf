@@ -16,8 +16,13 @@ class SurfController(
 ) {
 
     @GetMapping()
-    fun getUser() {
-        surfService.go()
+    fun goKids() {
+        surfService.goKids()
+    }
+
+    @GetMapping("/adult")
+    fun goAdult() {
+        surfService.goAdult()
     }
 
     //send test email
