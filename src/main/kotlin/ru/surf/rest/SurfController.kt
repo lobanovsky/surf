@@ -15,7 +15,7 @@ class SurfController(
     private val emailService: EmailService,
 ) {
 
-    @GetMapping()
+    @GetMapping("/kids")
     fun goKids() {
         surfService.goKids()
     }

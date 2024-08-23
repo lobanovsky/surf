@@ -105,7 +105,7 @@ class SurfService(
 
     private fun waiting(prefix: String) {
         // Если мест нет, ждем случайное количество секунд и пытаемся снова
-        val second = (3..15).random().toLong()
+        val second = (1..3).random().toLong()
         val mills = second * 1000
         logger().info("$prefix мест нет, попробуем еще раз через $second секунд ($mills миллисекунд)")
         //minutes to mills
