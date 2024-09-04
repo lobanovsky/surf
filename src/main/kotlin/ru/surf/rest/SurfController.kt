@@ -25,6 +25,11 @@ class SurfController(
         surfService.goAdult()
     }
 
+    @GetMapping("/aero")
+    fun doAero() {
+        surfService.goAero()
+    }
+
     //send test email
     @GetMapping("/test")
     fun test() {
