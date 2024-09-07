@@ -40,17 +40,26 @@ class SurfService(
                             By.xpath("//*[contains(text(), 'Осталось мест:')]")
                         )
                     )
-                    // Перебираем и выводим текст всех найденных элементов, если в тексте есть число больше 0, отправляем письмо
-                    for (element in elements) {
-                        val text = element.text
-                        logger().info("Найденный текст: $text")
-                        val split = text.split(" ")
+
+                    val slots: List<WebElement> = driver.findElements(By.cssSelector(".Place_CardContent__7AO5e a"))
+
+                    for (slot in slots) {
+                        val slotInfo = slot.findElement(By.cssSelector(".TimeSlot_CountText__c7mqr")).text
+                        val time = slot.findElement(By.cssSelector(".TimeSlot_Time___zyty")).text
+                        val description = slot.findElement(By.cssSelector(".TimeSlot_Desc__tX0zr")).text
+
+                        val split = slotInfo.split(" ")
+                        var freePlaces = 0
                         if (split.size > 2) {
-                            val count = split[2].toInt()
-                            if (count > 0) {
-                                emailService.send("Билеты доступны на 6-9 лет", "Купить билет по ссылке! $url")
-//                                return
-                            }
+                            freePlaces = split[2].toInt()
+                        }
+
+                        // Проверяем, есть ли свободные места
+//                        if (freePlaces > 0 && time.contains("17:00")) {
+                        if (freePlaces > 0) {
+                            emailService.send("Билеты 6-9 на $time", "Купить билет по ссылке! $url")
+                        } else {
+                            logger().info("Билеты 6-9 на $time мест нет")
                         }
                     }
                     waiting("6-9 лет")
@@ -83,19 +92,28 @@ class SurfService(
                             By.xpath("//*[contains(text(), 'Осталось мест:')]")
                         )
                     )
-                    // Перебираем и выводим текст всех найденных элементов, если в тексте есть число больше 0, отправляем письмо
-                    for (element in elements) {
-                        val text = element.text
-                        logger().info("Найденный текст: $text")
-                        val split = text.split(" ")
+                    val slots: List<WebElement> = driver.findElements(By.cssSelector(".Place_CardContent__7AO5e a"))
+
+                    for (slot in slots) {
+                        val slotInfo = slot.findElement(By.cssSelector(".TimeSlot_CountText__c7mqr")).text
+                        val time = slot.findElement(By.cssSelector(".TimeSlot_Time___zyty")).text
+                        val description = slot.findElement(By.cssSelector(".TimeSlot_Desc__tX0zr")).text
+
+                        val split = slotInfo.split(" ")
+                        var freePlaces = 0
                         if (split.size > 2) {
-                            val count = split[2].toInt()
-                            if (count > 0) {
-                                emailService.send("Билеты 18+", "Купить билет по ссылке! $url")
-//                                return
-                            }
+                            freePlaces = split[2].toInt()
+                        }
+
+                        // Проверяем, есть ли свободные места
+//                        if (freePlaces > 0 && time.contains("15:00")) {
+                        if (freePlaces > 0) {
+                            emailService.send("Билеты 18+ на $time", "Купить билет по ссылке! $url")
+                        } else {
+                            logger().info("Билеты 18+ на $time мест нет")
                         }
                     }
+
                     waiting("18+")
                 } catch (e: Exception) {
                     logger().error(e.message, e)
